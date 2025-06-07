@@ -1,0 +1,105 @@
+body { font-family: sans-serif; margin: 0; background-color: #f4f4f4; }
+.main-container { display: flex; gap: 20px; padding: 20px; }
+/* --- Estilos para el nuevo contenedor del logo --- */
+.logo-container {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo {
+    max-width: 150px; /* <- Puedes cambiar este número para hacerlo más grande o pequeño */
+    height: auto;
+}
+
+.management-container, .label-preview-container {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Estilos para la lista de productos --- */
+.product-list-container { flex-grow: 1; }
+#product-list { list-style-type: none; padding: 0; }
+#product-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+#product-list li:hover { background-color: #e9f5ff; }
+.delete-btn { background: #ff4d4d; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 8px; }
+
+/* --- Estilos para el formulario de añadir --- */
+.add-product-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+#add-product-form { display: flex; flex-direction: column; gap: 10px; }
+#add-product-form input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+#add-product-form button { padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+
+/* --- Estilos para el panel derecho --- */
+.label-preview-container { text-align: center; }
+#label-preview img { max-width: 200px; margin-top: 20px; }
+.print-controls { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+#print-button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+/* --- ¡LA MAGIA DE LA IMPRESIÓN! (VERSIÓN FINAL REFINADA) --- */
+@media print {
+    /* Ocultamos todo lo que no queremos imprimir */
+    .management-container, /* Oculta toda la columna izquierda */
+    .label-preview-container h2, 
+    .print-controls {
+        display: none;
+    }
+
+    /* ¡NUEVA REGLA PARA OCULTAR EL NOMBRE DEL PRODUCTO! */
+    #label-preview h3 {
+        display: none;
+    }
+    
+    /* Reseteamos los estilos del cuerpo y contenedores para que no interfieran */
+    body, .main-container, .label-preview-container, #label-preview {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: none;
+        border: none;
+        background: none;
+    }
+
+    /* Centramos el contenido de la etiqueta */
+    #label-preview {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2mm; 
+    }
+
+    /* Ajustamos el texto restante y el QR */
+    #label-preview p {
+        font-size: 8pt;
+        margin: 0;
+        line-height: 1;
+    }
+    
+    #label-preview img {
+        max-width: 80%;
+        max-height: 80%;
+        width: auto;
+        height: auto;
+    }
+
+    /* Mantenemos las reglas de tamaño del contenedor de la etiqueta */
+    #label-preview.size-1x1 { width: 1cm; height: 1cm; }
+    #label-preview.size-3x3 { width: 3cm; height: 3cm; }
+    #label-preview.size-5x5 { width: 5cm; height: 5cm; }
+}
