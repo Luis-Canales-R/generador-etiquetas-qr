@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Enlazamos la misma hoja de estilos que usa el panel principal -->
+    <!-- La sintaxis 'url_for' es de Flask y encuentra la ruta correcta al archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- El título de la página será dinámico, basado en el nombre del producto -->
+    <title>Detalle de: {{ product['product_name'] }}</title>
+
+    <!-- Estilos específicos solo para esta página de detalles -->
+    <style>
+        body {
+            background-color: #f0f2f5; /* Mantenemos el mismo fondo */
+        }
+        .detail-container {
+            max-width: 600px;
+            margin: 40px auto; /* Centrado y con margen superior/inferior */
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .detail-container h1 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #333;
+        }
+        .detail-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .detail-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            font-size: 1.1em;
+        }
+        /* Último elemento sin borde inferior */
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+        .detail-list li strong {
+            flex-basis: 200px; /* Ancho fijo para la etiqueta del campo */
+            color: #555;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="detail-container">
+        
+        <!-- Aquí es donde se insertan los datos del producto -->
+        <!-- Usamos la sintaxis de corchetes ['...'] que es la correcta para Jinja2 -->
+        
+        <h1>{{ product['product_name'] }}</h1>
+        
+        <ul class="detail-list">
+            <li><strong>N° Activo Fijo:</strong> {{ product['inventory_number'] }}</li>
+            <li><strong>Número de Serie:</strong> {{ product['serial_number'] }}</li>
+            <li><strong>Marca:</strong> {{ product['brand'] }}</li>
+            <li><strong>Modelo:</strong> {{ product['model'] }}</li>
+            <li><strong>Tipo de Equipo:</strong> {{ product['equipment_type'] }}</li>
+        </ul>
+        
+    </div>
+</body>
+</html>
