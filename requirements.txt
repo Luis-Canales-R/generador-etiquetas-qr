@@ -1,0 +1,8 @@
+Flask>=2.0
+Flask-SQLAlchemy>=2.5
+Flask-Login>=0.5
+Werkzeug>=2.0
+Flask-Migrate>=3.0
+# qrcode y pillow para la generación de QR, pueden mantenerse si esa funcionalidad se integra después
+qrcode>=7.3
+Pillow>=9.0

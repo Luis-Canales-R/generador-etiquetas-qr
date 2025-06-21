@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - SGA</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 90vh; background-color: #f4f4f4; margin: 0; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 320px; }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-bottom: 5px; color: #555; }
+        input[type="text"], input[type="email"], input[type="password"], select { width: 93%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .message { text-align: center; margin-top: 15px; padding: 10px; border-radius: 4px; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;}
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;}
+        .link-login { text-align: center; margin-top: 15px; }
+        .link-login a { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Crear Cuenta</h2>
+        <form id="registerForm">
+            <div>
+                <label for="nombre_completo">Nombre Completo:</label>
+                <input type="text" id="nombre_completo" name="nombre_completo" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" minlength="8" required>
+            </div>
+            <div>
+                <label for="confirm_password">Confirmar Contraseña:</label>
+                <input type="password" id="confirm_password" name="confirm_password" minlength="8" required>
+            </div>
+            <div>
+                <label for="rol">Rol:</label>
+                <select id="rol" name="rol">
+                    <option value="EMPLEADO" selected>Empleado</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="TECNICO">Técnico</option>
+                    <option value="CONTADOR">Contador</option>
+                    <option value="AUDITOR">Auditor</option>
+                </select>
+            </div>
+            <button type="submit">Registrar</button>
+        </form>
+        <div id="messageArea" class="message" style="display:none;"></div>
+        <div class="link-login">
+            <p>¿Ya tienes cuenta? <a href="/auth/login">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const nombre_completo = document.getElementById('nombre_completo').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+            const rol = document.getElementById('rol').value;
+            const messageArea = document.getElementById('messageArea');
+
+            messageArea.style.display = 'none';
+            messageArea.className = 'message'; // Reset classes
+
+            if (password !== confirm_password) {
+                messageArea.textContent = 'Las contraseñas no coinciden.';
+                messageArea.classList.add('error');
+                messageArea.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre_completo, email, password, rol })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageArea.textContent = data.message || 'Registro exitoso. Serás redirigido al login.';
+                    messageArea.classList.add('success');
+                    messageArea.style.display = 'block';
+                    // Redirigir a la página de login después de un breve retraso
+                    window.setTimeout(() => {
+                        window.location.href = '/auth/login';
+                    }, 2000);
+                } else {
+                    messageArea.textContent = data.message || 'Error en el registro.';
+                    messageArea.classList.add('error');
+                    messageArea.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                messageArea.textContent = 'Ocurrió un error al intentar registrarse. Por favor, inténtalo de nuevo.';
+                messageArea.classList.add('error');
+                messageArea.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
